@@ -14,7 +14,7 @@ import journey6 from "@/assets/patient-journey-6.jpg.asset.json";
 import tanjaImage from "@/assets/tanja-before-after.png.asset.json";
 import logo from "@/assets/vox-care-logo-final-2026.png.asset.json";
 import deviceImage from "@/assets/vox-rd-prototype.png.asset.json";
-import heroImage from "@/assets/vox-hero-clinical.png.asset.json";
+import heroImage from "@/assets/vox-hero-clinical.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -163,7 +163,7 @@ function Index() {
       <main id="top">
         <section className="relative mx-auto max-w-[1440px] px-3 pt-3 sm:px-6 sm:pt-6">
           <div className="relative min-h-[calc(100svh-7rem)] overflow-hidden rounded-[4px] bg-ink sm:min-h-[760px]">
-            <img src={heroImage.url} alt="A doctor examining a patient’s throat" className="absolute inset-0 h-full w-full object-cover object-center" />
+            <img src={heroImage.url} alt="A couple standing together in a garden" className="absolute inset-0 h-full w-full object-cover object-center" />
             <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/35 to-transparent" />
             <div className="relative z-10 flex min-h-[calc(100svh-7rem)] flex-col justify-end px-5 pb-7 pt-32 sm:min-h-[760px] sm:px-12 sm:pb-12 lg:px-16">
               <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-background drop-shadow-[0_1px_6px_rgba(0,0,0,0.65)] [font-family:var(--font-display)] sm:text-sm animate-rise">VOX Care · Non-profit voice restoration initiative</p>
