@@ -1,9 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { notifyTeam } from "./notify";
+
 const CheckoutInput = z.object({
   amount: z.number().int().min(100).max(10_000_000),
   origin: z.string().url(),
+  donorName: z.string().trim().max(120).optional(),
+  donorContact: z.string().trim().max(200).optional(),
 });
 
 const VerifyInput = z.object({
