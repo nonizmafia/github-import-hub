@@ -448,3 +448,60 @@ function CampaignError() {
     </div>
   );
 }
+function GiftClaimForm({ amount }: { amount: number }) {
+  const submit = useServerFn(submitGiftClaim);
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [address, setAddress] = useState("");
+  const [size, setSize] = useState("");
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setError(null);
+    try {
+      const res = await submit({ data: { donorName: name, contact, address, size: size || undefined, amount } });
+      if (res.ok) setDone(true);
+      else setError(res.error);
+    } catch {
+      setError("Your gift request could not be sent. Please check the details and try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (done) {
+    return (
+      <div className="border border-primary-foreground/25 p-5 text-sm leading-6 text-primary-foreground/85">
+        <p className="font-semibold text-primary-foreground">Gift request received — thank you!</p>
+        <p className="mt-1">The VOX team will reach out to arrange your gift.</p>
+      </div>
+    );
+  }
+
+  const fieldClass = "h-12 w-full rounded-none border border-primary-foreground/35 bg-transparent px-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground";
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-3 border border-primary-foreground/25 p-5">
+      <p className="text-sm font-semibold text-primary-foreground">Claim your gift (donation ₹{amount.toLocaleString("en-IN")})</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <input required minLength={2} maxLength={120} placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
+        <input required minLength={5} maxLength={200} placeholder="Email or phone" value={contact} onChange={(e) => setContact(e.target.value)} className={fieldClass} />
+      </div>
+      <textarea required minLength={10} maxLength={1000} rows={2} placeholder="Delivery address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full rounded-none border border-primary-foreground/35 bg-transparent p-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
+      <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+        <select value={size} onChange={(e) => setSize(e.target.value)} className={`${fieldClass} [&>option]:text-foreground`}>
+          <option value="">T-shirt size (optional)</option>
+          {["S", "M", "L", "XL", "XXL"].map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <Button type="submit" variant="secondary" className="h-12 rounded-none px-6" disabled={sending}>
+          {sending ? "Sending…" : "Send gift request"}
+        </Button>
+      </div>
+      {error && <p role="alert" className="text-sm font-semibold text-primary-foreground">{error}</p>}
+    </form>
+  );
+}
