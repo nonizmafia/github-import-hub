@@ -7,3 +7,4 @@
 - [ ] Auto-increase raised amount & donor count on each paid donation (blocked: Stripe not connected yet)
 - [ ] Email donor name/contact/amount to voxhealthcaree@gmail.com on each donation intent (Resend)
 - [ ] Email notification to voxhealthcaree@gmail.com when a patient story is submitted
+- [ ] Gift claim form for donors above ₹5,000 (name, contact, address, size) -> DB + email to voxhealthcaree@gmail.com
