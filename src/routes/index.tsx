@@ -170,7 +170,7 @@ function Index() {
               <div className="grid items-end gap-8 lg:grid-cols-[1.25fr_0.75fr]">
                 <div className="max-w-4xl animate-rise [animation-delay:100ms]">
                   <h1 className="text-balance text-[2.7rem] font-extrabold leading-[1.02] text-background sm:text-7xl lg:text-[6.5rem]">
-                    Not just a voice.<br />Their voice, back.
+                    Some silences aren&apos;t meant to be permanent
                   </h1>
                   <p className="mt-6 max-w-2xl text-base leading-7 text-background/85 sm:text-xl sm:leading-8">
                     Throat cancer surgery can take away a person&apos;s ability to speak. VOX is building a device that uses the latest technologies to restore a person&apos;s own natural voice after they lose it.
