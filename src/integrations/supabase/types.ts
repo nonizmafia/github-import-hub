@@ -14,66 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      campaign_totals: {
-        Row: {
-          campaign_slug: string
-          currency: string
-          goal_amount: number
-          id: string
-          raised_amount: number
-          updated_at: string
-        }
-        Insert: {
-          campaign_slug: string
-          currency?: string
-          goal_amount: number
-          id?: string
-          raised_amount?: number
-          updated_at?: string
-        }
-        Update: {
-          campaign_slug?: string
-          currency?: string
-          goal_amount?: number
-          id?: string
-          raised_amount?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      patient_stories: {
-        Row: {
-          created_at: string
-          draft: string
-          id: string
-          patient_name: string | null
-          quote: string | null
-          status: string
-          story: string
-          title: string
-        }
-        Insert: {
-          created_at?: string
-          draft: string
-          id?: string
-          patient_name?: string | null
-          quote?: string | null
-          status?: string
-          story: string
-          title: string
-        }
-        Update: {
-          created_at?: string
-          draft?: string
-          id?: string
-          patient_name?: string | null
-          quote?: string | null
-          status?: string
-          story?: string
-          title?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
