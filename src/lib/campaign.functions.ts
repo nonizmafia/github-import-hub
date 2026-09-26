@@ -8,6 +8,7 @@ export type CampaignTotal = {
   currency: string;
   goalAmount: number;
   raisedAmount: number;
+  donorCount: number;
   updatedAt: string;
 };
 
@@ -36,7 +37,7 @@ export const getCampaignTotal = createServerFn({ method: "GET" }).handler(
 
     const { data, error } = await client
       .from("campaign_totals")
-      .select("campaign_slug, currency, goal_amount, raised_amount, updated_at")
+      .select("campaign_slug, currency, goal_amount, raised_amount, donor_count, updated_at")
       .eq("campaign_slug", "vox-care")
       .single();
 
@@ -49,6 +50,7 @@ export const getCampaignTotal = createServerFn({ method: "GET" }).handler(
       currency: data.currency,
       goalAmount: data.goal_amount,
       raisedAmount: data.raised_amount,
+      donorCount: data.donor_count,
       updatedAt: data.updated_at,
     };
   },
