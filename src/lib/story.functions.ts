@@ -112,13 +112,15 @@ export const generateStory = createServerFn({ method: "POST" })
       console.error("[story] db unavailable:", dbErr);
     }
 
-    // Let the team know a new story arrived.
+    // Send the full submission to the team inbox.
     try {
       const { notifyTeam } = await import("./notify");
       await notifyTeam("New patient story submitted — VOX Care", {
         Name: data.name?.trim(),
-        Title: output.title,
-        "Story (first 500 chars)": output.story.slice(0, 500),
+        "Their original draft": data.draft,
+        "Edited title": output.title,
+        "Edited story": output.story,
+        "Pull quote": output.quote,
       });
     } catch (notifyErr) {
       console.error("[story] notify failed:", notifyErr);
