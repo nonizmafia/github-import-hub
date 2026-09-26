@@ -25,6 +25,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { getCampaignTotal, type CampaignTotal } from "@/lib/campaign.functions";
 import { createDonationCheckout } from "@/lib/donation.functions";
+import { submitGiftClaim } from "@/lib/gift.functions";
 import { ShareButtons } from "@/components/share-buttons";
 import { CAMPAIGN_TITLE, CAMPAIGN_DESCRIPTION, SITE_URL } from "@/lib/site";
 
@@ -343,7 +344,8 @@ function Index() {
                 </Button>
               </div>
               {payError && <p role="alert" className="text-sm font-semibold text-primary-foreground">{payError}</p>}
-              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 are eligible for a gift.</p>
+              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 are eligible for a gift — fill the form below to receive it.</p>
+              {donationValue >= 5000 && <GiftClaimForm amount={Math.round(donationValue)} />}
               <div className="border-t border-primary-foreground/20 pt-5 [&_a]:border-primary-foreground/40 [&_a]:text-primary-foreground [&_button]:border-primary-foreground/40 [&_button]:text-primary-foreground [&_svg]:text-primary-foreground">
                 <p className="mb-3 text-sm text-primary-foreground/75">Can&apos;t give today? Sharing helps just as much.</p>
                 <ShareButtons url={SITE_URL} title={CAMPAIGN_TITLE} text={CAMPAIGN_DESCRIPTION} />
