@@ -1,15 +1,17 @@
 /**
- * Sends an internal notification email to the VOX team via Resend.
- * Server-side only. No-op (logged) when RESEND_API_KEY is not configured.
+ * Sends an internal notification email to the VOX team via the Resend
+ * connector gateway. Server-side only. No-op (logged) when not configured.
  * Note: without a verified domain in Resend, delivery works only to the
  * Resend account owner's own email address.
  */
+const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
 const NOTIFY_TO = "voxhealthcaree@gmail.com";
 
 export async function notifyTeam(subject: string, lines: Record<string, string | number | null | undefined>) {
-  const apiKey = process.env["RESEND_API_KEY"];
-  if (!apiKey) {
-    console.warn("[notify] RESEND_API_KEY not configured; skipping:", subject);
+  const lovableKey = process.env["LOVABLE_API_KEY"];
+  const connectionKey = process.env["RESEND_API_KEY"];
+  if (!lovableKey || !connectionKey) {
+    console.warn("[notify] email not configured; skipping:", subject);
     return { sent: false as const, reason: "not_configured" as const };
   }
 
@@ -24,9 +26,13 @@ export async function notifyTeam(subject: string, lines: Record<string, string |
   const html = `<div style="font-family:Arial,sans-serif;max-width:560px"><h2 style="margin:0 0 16px">${subject.replace(/</g, "&lt;")}</h2><table style="border-collapse:collapse">${rows}</table><p style="margin-top:24px;color:#999;font-size:12px">Sent automatically from the VOX Care website.</p></div>`;
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
+    const res = await fetch(`${GATEWAY_URL}/emails`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${lovableKey}`,
+        "X-Connection-Api-Key": connectionKey,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         from: "VOX Care <onboarding@resend.dev>",
         to: [NOTIFY_TO],
