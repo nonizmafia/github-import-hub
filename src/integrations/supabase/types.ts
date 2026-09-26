@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           campaign_slug: string
           currency: string
+          donor_count: number
           goal_amount: number
           id: string
           raised_amount: number
@@ -26,6 +27,7 @@ export type Database = {
         Insert: {
           campaign_slug: string
           currency?: string
+          donor_count?: number
           goal_amount: number
           id?: string
           raised_amount?: number
@@ -34,6 +36,7 @@ export type Database = {
         Update: {
           campaign_slug?: string
           currency?: string
+          donor_count?: number
           goal_amount?: number
           id?: string
           raised_amount?: number

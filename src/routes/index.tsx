@@ -87,6 +87,7 @@ function Index() {
             currency?: string;
             goal_amount?: number;
             raised_amount?: number;
+            donor_count?: number;
             updated_at?: string;
           };
           if (
@@ -101,6 +102,7 @@ function Index() {
               currency: row.currency,
               goalAmount: row.goal_amount,
               raisedAmount: row.raised_amount,
+              donorCount: row.donor_count ?? 0,
               updatedAt: row.updated_at,
             };
             queryClient.setQueryData(campaignQuery.queryKey, updated);
@@ -409,7 +411,7 @@ function LiveProgress({ campaign, percentage }: { campaign: CampaignTotal; perce
           <span className="size-2.5 rounded-full bg-cyan/70" />
           <span className="size-2.5 rounded-full bg-cyan/40" />
         </span>
-        <span><span className="font-bold text-background">63 donors</span> have backed this campaign</span>
+        <span><span className="font-bold text-background">{campaign.donorCount} {campaign.donorCount === 1 ? "donor" : "donors"}</span> have backed this campaign</span>
       </div>
       <Button asChild className="mt-6 h-12 w-full rounded-none bg-background text-foreground shadow-none hover:bg-cyan">
         <a href="#donate">Donate now <ArrowRight /></a>
