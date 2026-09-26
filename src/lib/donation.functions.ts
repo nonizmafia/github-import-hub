@@ -21,6 +21,14 @@ const VerifyInput = z.object({
 export const createDonationCheckout = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => CheckoutInput.parse(input))
   .handler(async ({ data }) => {
+    // Let the team know someone wants to donate (amount + optional name/contact).
+    await notifyTeam("New donation intent — VOX Care", {
+      Amount: `₹${data.amount.toLocaleString("en-IN")}`,
+      Name: data.donorName,
+      "Email / phone": data.donorContact,
+      When: new Date().toISOString(),
+    });
+
     const secretKey = process.env["STRIPE_SECRET_KEY"];
     if (!secretKey) {
       return {
