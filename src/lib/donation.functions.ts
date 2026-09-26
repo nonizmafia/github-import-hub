@@ -1,9 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import { notifyTeam } from "./notify";
+
 const CheckoutInput = z.object({
   amount: z.number().int().min(100).max(10_000_000),
   origin: z.string().url(),
+  donorName: z.string().trim().max(120).optional(),
+  donorContact: z.string().trim().max(200).optional(),
 });
 
 const VerifyInput = z.object({
@@ -17,6 +21,14 @@ const VerifyInput = z.object({
 export const createDonationCheckout = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => CheckoutInput.parse(input))
   .handler(async ({ data }) => {
+    // Let the team know someone wants to donate (amount + optional name/contact).
+    await notifyTeam("New donation intent — VOX Care", {
+      Amount: `₹${data.amount.toLocaleString("en-IN")}`,
+      Name: data.donorName,
+      "Email / phone": data.donorContact,
+      When: new Date().toISOString(),
+    });
+
     const secretKey = process.env["STRIPE_SECRET_KEY"];
     if (!secretKey) {
       return {

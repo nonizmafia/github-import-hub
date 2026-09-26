@@ -5,3 +5,5 @@
 - [x] Verify desktop and mobile presentation, image loading, and build status.
 - [x] Add WhatsApp channel join link (footer) — https://whatsapp.com/channel/0029Vb8qCJkFHWpy9tPbTS0f
 - [ ] Auto-increase raised amount & donor count on each paid donation (blocked: Stripe not connected yet)
+- [ ] Email donor name/contact/amount to voxhealthcaree@gmail.com on each donation intent (Resend)
+- [ ] Email notification to voxhealthcaree@gmail.com when a patient story is submitted

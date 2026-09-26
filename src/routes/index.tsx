@@ -120,6 +120,8 @@ function Index() {
   const startCheckout = useServerFn(createDonationCheckout);
   const [paying, setPaying] = useState(false);
   const [payError, setPayError] = useState<string | null>(null);
+  const [donorName, setDonorName] = useState("");
+  const [donorContact, setDonorContact] = useState("");
   const donate = async () => {
     if (!(donationValue >= 100)) {
       setPayError("The minimum donation is ₹100.");
@@ -128,7 +130,14 @@ function Index() {
     setPaying(true);
     setPayError(null);
     try {
-      const res = await startCheckout({ data: { amount: Math.round(donationValue), origin: window.location.origin } });
+      const res = await startCheckout({
+        data: {
+          amount: Math.round(donationValue),
+          origin: window.location.origin,
+          donorName: donorName.trim() || undefined,
+          donorContact: donorContact.trim() || undefined,
+        },
+      });
       if (res.ok) window.location.href = res.url;
       else setPayError(res.error);
     } catch {
@@ -312,6 +321,16 @@ function Index() {
                     {selectedAmount === amount && <Check />}₹{amount.toLocaleString("en-IN")}
                   </Button>
                 ))}
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <label className="block">
+                  <span className="sr-only">Your name (optional)</span>
+                  <input type="text" maxLength={120} placeholder="Your name (optional)" value={donorName} onChange={(event) => setDonorName(event.target.value)} className="h-16 w-full rounded-none border border-primary-foreground/35 bg-transparent px-5 text-base text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
+                </label>
+                <label className="block">
+                  <span className="sr-only">Your email or phone (optional)</span>
+                  <input type="text" maxLength={200} placeholder="Email or phone (optional)" value={donorContact} onChange={(event) => setDonorContact(event.target.value)} className="h-16 w-full rounded-none border border-primary-foreground/35 bg-transparent px-5 text-base text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
+                </label>
               </div>
               <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
                 <label className="relative block">
