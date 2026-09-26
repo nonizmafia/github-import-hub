@@ -14,7 +14,7 @@ import journey6 from "@/assets/patient-journey-6.jpg.asset.json";
 import tanjaImage from "@/assets/tanja-before-after.png.asset.json";
 import logo from "@/assets/vox-care-logo-final-2026.png.asset.json";
 import deviceImage from "@/assets/vox-rd-prototype.png.asset.json";
-import heroImage from "@/assets/vox-hero-clinical.png.asset.json";
+import heroImage from "@/assets/vox-hero-clinical.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
