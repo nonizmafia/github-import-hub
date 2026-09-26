@@ -44,6 +44,36 @@ export type Database = {
         }
         Relationships: []
       }
+      gift_claims: {
+        Row: {
+          address: string
+          amount: number
+          contact: string
+          created_at: string
+          donor_name: string
+          id: string
+          size: string | null
+        }
+        Insert: {
+          address: string
+          amount: number
+          contact: string
+          created_at?: string
+          donor_name: string
+          id?: string
+          size?: string | null
+        }
+        Update: {
+          address?: string
+          amount?: number
+          contact?: string
+          created_at?: string
+          donor_name?: string
+          id?: string
+          size?: string | null
+        }
+        Relationships: []
+      }
       patient_stories: {
         Row: {
           created_at: string

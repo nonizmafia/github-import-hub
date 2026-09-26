@@ -25,6 +25,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { getCampaignTotal, type CampaignTotal } from "@/lib/campaign.functions";
 import { createDonationCheckout } from "@/lib/donation.functions";
+import { submitGiftClaim } from "@/lib/gift.functions";
 import { ShareButtons } from "@/components/share-buttons";
 import { CAMPAIGN_TITLE, CAMPAIGN_DESCRIPTION, SITE_URL } from "@/lib/site";
 
@@ -343,7 +344,8 @@ function Index() {
                 </Button>
               </div>
               {payError && <p role="alert" className="text-sm font-semibold text-primary-foreground">{payError}</p>}
-              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 are eligible for a gift.</p>
+              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 are eligible for a gift — fill the form below to receive it.</p>
+              {donationValue >= 5000 && <GiftClaimForm amount={Math.round(donationValue)} />}
               <div className="border-t border-primary-foreground/20 pt-5 [&_a]:border-primary-foreground/40 [&_a]:text-primary-foreground [&_button]:border-primary-foreground/40 [&_button]:text-primary-foreground [&_svg]:text-primary-foreground">
                 <p className="mb-3 text-sm text-primary-foreground/75">Can&apos;t give today? Sharing helps just as much.</p>
                 <ShareButtons url={SITE_URL} title={CAMPAIGN_TITLE} text={CAMPAIGN_DESCRIPTION} />
@@ -444,5 +446,62 @@ function CampaignError() {
     <div className="flex min-h-screen items-center justify-center bg-background px-5">
       <div className="max-w-md text-center"><h1 className="text-3xl font-bold">VOX Care</h1><p className="mt-4 text-muted-foreground">The campaign page could not load. Please refresh and try again.</p></div>
     </div>
+  );
+}
+function GiftClaimForm({ amount }: { amount: number }) {
+  const submit = useServerFn(submitGiftClaim);
+  const [name, setName] = useState("");
+  const [contact, setContact] = useState("");
+  const [address, setAddress] = useState("");
+  const [size, setSize] = useState("");
+  const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    setError(null);
+    try {
+      const res = await submit({ data: { donorName: name, contact, address, size: size || undefined, amount } });
+      if (res.ok) setDone(true);
+      else setError(res.error);
+    } catch {
+      setError("Your gift request could not be sent. Please check the details and try again.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (done) {
+    return (
+      <div className="border border-primary-foreground/25 p-5 text-sm leading-6 text-primary-foreground/85">
+        <p className="font-semibold text-primary-foreground">Gift request received — thank you!</p>
+        <p className="mt-1">The VOX team will reach out to arrange your gift.</p>
+      </div>
+    );
+  }
+
+  const fieldClass = "h-12 w-full rounded-none border border-primary-foreground/35 bg-transparent px-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground";
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-3 border border-primary-foreground/25 p-5">
+      <p className="text-sm font-semibold text-primary-foreground">Claim your gift (donation ₹{amount.toLocaleString("en-IN")})</p>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <input required minLength={2} maxLength={120} placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
+        <input required minLength={5} maxLength={200} placeholder="Email or phone" value={contact} onChange={(e) => setContact(e.target.value)} className={fieldClass} />
+      </div>
+      <textarea required minLength={10} maxLength={1000} rows={2} placeholder="Delivery address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full rounded-none border border-primary-foreground/35 bg-transparent p-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
+      <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+        <select value={size} onChange={(e) => setSize(e.target.value)} className={`${fieldClass} [&>option]:text-foreground`}>
+          <option value="">T-shirt size (optional)</option>
+          {["S", "M", "L", "XL", "XXL"].map((s) => <option key={s} value={s}>{s}</option>)}
+        </select>
+        <Button type="submit" variant="secondary" className="h-12 rounded-none px-6" disabled={sending}>
+          {sending ? "Sending…" : "Send gift request"}
+        </Button>
+      </div>
+      {error && <p role="alert" className="text-sm font-semibold text-primary-foreground">{error}</p>}
+    </form>
   );
 }
