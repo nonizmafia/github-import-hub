@@ -344,7 +344,7 @@ function Index() {
                 </Button>
               </div>
               {payError && <p role="alert" className="text-sm font-semibold text-primary-foreground">{payError}</p>}
-              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 are eligible for a gift — fill the form below to receive it.</p>
+              <p className="flex items-center gap-2 text-sm text-primary-foreground/75"><Gift className="size-4" /> Donations above ₹5,000 receive a surprise thank-you gift — fill the form below with your details so we can send it to your address.</p>
               {donationValue >= 5000 && <GiftClaimForm amount={Math.round(donationValue)} />}
               <div className="border-t border-primary-foreground/20 pt-5 [&_a]:border-primary-foreground/40 [&_a]:text-primary-foreground [&_button]:border-primary-foreground/40 [&_button]:text-primary-foreground [&_svg]:text-primary-foreground">
                 <p className="mb-3 text-sm text-primary-foreground/75">Can&apos;t give today? Sharing helps just as much.</p>
@@ -384,7 +384,7 @@ function Index() {
             <h2 className="text-4xl font-bold sm:text-6xl">Questions,<br />answered.</h2>
               <Accordion type="single" collapsible className="border-t border-border">
                 <AccordionItem value="use"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">What will my donation be used for?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">Entirely for R&amp;D and testing of the VOX device — no other use. Every rupee goes into three clear stages: building and refining the prototype, testing it safely with medical advisors, and preparing it for the first patients. We do not spend donations on marketing, salaries or office costs, so your support moves the device forward directly.</AccordionContent></AccordionItem>
-                <AccordionItem value="gift"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">Do I get anything for donating?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">Donations above ₹5,000 are eligible for a gift as a small thank-you from the VOX team. Every supporter, whatever the amount, also becomes part of the VOX community and hears first about milestones, patient stories and the moment the device helps someone speak in their own voice again.</AccordionContent></AccordionItem>
+                <AccordionItem value="gift"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">Do I get anything for donating?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">Every donation above ₹5,000 receives a surprise thank-you gift from the VOX team — we won't spoil what it is, but it's our way of saying we're grateful. Just fill in your details in the form that appears after you choose your amount, and we'll send it to your address. Every supporter, whatever the amount, also becomes part of the VOX community and hears first about milestones, patient stories and the moment the device helps someone speak in their own voice again.</AccordionContent></AccordionItem>
                 <AccordionItem value="updates"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">Will I know how my donation is used?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">Yes. Every supporter receives progress updates as the VOX device moves from prototype to patient testing. We share what was built, what was tested, what we learned and what comes next — honestly, including the setbacks. You can also follow our WhatsApp channel for regular news from the team.</AccordionContent></AccordionItem>
                 <AccordionItem value="corporate"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">Can my company or organisation support VOX?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">Absolutely. Companies, hospitals, foundations and CSR teams can support VOX through funding, testing partnerships, medical expertise or spreading the word. Write to voxhealthcaree@gmail.com and we&apos;ll set up a partnership that fits your organisation and its goals.</AccordionContent></AccordionItem>
                 <AccordionItem value="timeline"><AccordionTrigger className="py-6 text-left text-base hover:no-underline">When will the VOX device reach patients?</AccordionTrigger><AccordionContent className="pb-6 text-base leading-7 text-muted-foreground">The device is in active R&amp;D and testing. Before it reaches patients it must be tested carefully for safety, comfort and voice quality. We won&apos;t rush this, because people who have already been through so much deserve a device that truly works. Your donation directly accelerates the path to the first patients.</AccordionContent></AccordionItem>
@@ -453,7 +453,6 @@ function GiftClaimForm({ amount }: { amount: number }) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [address, setAddress] = useState("");
-  const [size, setSize] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -463,7 +462,7 @@ function GiftClaimForm({ amount }: { amount: number }) {
     setSending(true);
     setError(null);
     try {
-      const res = await submit({ data: { donorName: name, contact, address, size: size || undefined, amount } });
+      const res = await submit({ data: { donorName: name, contact, address, amount } });
       if (res.ok) setDone(true);
       else setError(res.error);
     } catch {
@@ -486,21 +485,16 @@ function GiftClaimForm({ amount }: { amount: number }) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-3 border border-primary-foreground/25 p-5">
-      <p className="text-sm font-semibold text-primary-foreground">Claim your gift (donation ₹{amount.toLocaleString("en-IN")})</p>
+      <p className="text-sm font-semibold text-primary-foreground">Claim your thank-you gift (donation ₹{amount.toLocaleString("en-IN")})</p>
+      <p className="text-xs leading-5 text-primary-foreground/70">It's a surprise — fill in your details and we'll deliver it to your address.</p>
       <div className="grid gap-3 sm:grid-cols-2">
         <input aria-label="Full name" required minLength={2} maxLength={120} placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
         <input aria-label="Email or phone" required minLength={5} maxLength={200} placeholder="Email or phone" value={contact} onChange={(e) => setContact(e.target.value)} className={fieldClass} />
       </div>
       <textarea aria-label="Delivery address" required minLength={10} maxLength={1000} rows={2} placeholder="Delivery address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full rounded-none border border-primary-foreground/35 bg-transparent p-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
-      <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-        <select aria-label="T-shirt size" value={size} onChange={(e) => setSize(e.target.value)} className={`${fieldClass} [&>option]:text-foreground`}>
-          <option value="">T-shirt size (optional)</option>
-          {["S", "M", "L", "XL", "XXL"].map((s) => <option key={s} value={s}>{s}</option>)}
-        </select>
-        <Button type="submit" variant="secondary" className="h-12 rounded-none px-6" disabled={sending}>
-          {sending ? "Sending…" : "Send gift request"}
-        </Button>
-      </div>
+      <Button type="submit" variant="secondary" className="h-12 w-full rounded-none px-6 sm:w-auto" disabled={sending}>
+        {sending ? "Sending…" : "Send gift request"}
+      </Button>
       {error && <p role="alert" className="text-sm font-semibold text-primary-foreground">{error}</p>}
     </form>
   );

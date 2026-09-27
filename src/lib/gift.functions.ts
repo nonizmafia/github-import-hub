@@ -7,7 +7,6 @@ const GiftClaimInput = z.object({
   donorName: z.string().trim().min(2).max(120),
   contact: z.string().trim().min(5).max(200),
   address: z.string().trim().min(10).max(1000),
-  size: z.string().trim().max(10).optional(),
   amount: z.number().int().min(5000).max(10_000_000),
 });
 
@@ -21,7 +20,6 @@ export const submitGiftClaim = createServerFn({ method: "POST" })
         donor_name: data.donorName,
         contact: data.contact,
         address: data.address,
-        size: data.size || null,
         amount: data.amount,
       });
       if (error) {
@@ -37,7 +35,6 @@ export const submitGiftClaim = createServerFn({ method: "POST" })
       Name: data.donorName,
       "Email / phone": data.contact,
       "Delivery address": data.address,
-      Size: data.size,
       "Donation amount": `₹${data.amount.toLocaleString("en-IN")}`,
     });
 
