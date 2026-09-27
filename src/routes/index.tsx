@@ -488,12 +488,12 @@ function GiftClaimForm({ amount }: { amount: number }) {
     <form onSubmit={onSubmit} className="space-y-3 border border-primary-foreground/25 p-5">
       <p className="text-sm font-semibold text-primary-foreground">Claim your gift (donation ₹{amount.toLocaleString("en-IN")})</p>
       <div className="grid gap-3 sm:grid-cols-2">
-        <input required minLength={2} maxLength={120} placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
-        <input required minLength={5} maxLength={200} placeholder="Email or phone" value={contact} onChange={(e) => setContact(e.target.value)} className={fieldClass} />
+        <input aria-label="Full name" required minLength={2} maxLength={120} placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} className={fieldClass} />
+        <input aria-label="Email or phone" required minLength={5} maxLength={200} placeholder="Email or phone" value={contact} onChange={(e) => setContact(e.target.value)} className={fieldClass} />
       </div>
-      <textarea required minLength={10} maxLength={1000} rows={2} placeholder="Delivery address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full rounded-none border border-primary-foreground/35 bg-transparent p-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
+      <textarea aria-label="Delivery address" required minLength={10} maxLength={1000} rows={2} placeholder="Delivery address" value={address} onChange={(e) => setAddress(e.target.value)} className="w-full rounded-none border border-primary-foreground/35 bg-transparent p-4 text-sm text-primary-foreground outline-none placeholder:text-primary-foreground/60 focus:border-primary-foreground" />
       <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-        <select value={size} onChange={(e) => setSize(e.target.value)} className={`${fieldClass} [&>option]:text-foreground`}>
+        <select aria-label="T-shirt size" value={size} onChange={(e) => setSize(e.target.value)} className={`${fieldClass} [&>option]:text-foreground`}>
           <option value="">T-shirt size (optional)</option>
           {["S", "M", "L", "XL", "XXL"].map((s) => <option key={s} value={s}>{s}</option>)}
         </select>
